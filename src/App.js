@@ -14,19 +14,6 @@ function App() {
     const [edit, setEdit] = useState(false)
     const [data, setData] = useState(null)
 
-    useEffect(() => {
-        getAllItems().then((res) => {
-            if (res) {
-                setItems(res.items)
-            }
-        })
-        getAllWarehouses().then((res) => {
-            if (res) {
-                setWarehouses(res.warehouses)
-            }
-        })
-    }, [])
-
     const getAllItems = useCallback(async () => {
         const url = `http://${environmentUrl}/api/inventory/`
         const response = await fetch(url, {
@@ -58,6 +45,19 @@ function App() {
             return resData
         }
     }, [])
+
+    useEffect(() => {
+        getAllItems().then((res) => {
+            if (res) {
+                setItems(res.items)
+            }
+        })
+        getAllWarehouses().then((res) => {
+            if (res) {
+                setWarehouses(res.warehouses)
+            }
+        })
+    }, [getAllItems, getAllWarehouses])
 
     const addHandler = async (data) => {
         const url = `http://${environmentUrl}/api/${type === "item" ? "inventory" : "warehouse"}/add`
